@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة فريق الفعاليات</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- شاشة تسجيل الدخول -->
+    <div id="login-screen" class="screen active">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <h1>نظام إدارة فريق الفعاليات</h1>
+                    <p>مرحباً بك، يرجى تسجيل الدخول للمتابعة</p>
+                </div>
+                <form id="login-form" class="login-form">
+                    <div class="form-group">
+                        <label for="username">اسم المستخدم</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">كلمة المرور</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
+                </form>
+                <div id="login-error" class="error-message" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- شاشة تغيير كلمة المرور -->
+    <div id="change-password-screen" class="screen">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <h1>تغيير كلمة المرور</h1>
+                    <p>يجب تغيير كلمة المرور المبدئية قبل المتابعة</p>
+                </div>
+                <form id="change-password-form" class="login-form">
+                    <div class="form-group">
+                        <label for="current-password">كلمة المرور الحالية</label>
+                        <input type="password" id="current-password" name="current_password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">كلمة المرور الجديدة</label>
+                        <input type="password" id="new-password" name="new_password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">تأكيد كلمة المرور</label>
+                        <input type="password" id="confirm-password" name="confirm_password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">تغيير كلمة المرور</button>
+                </form>
+                <div id="change-password-error" class="error-message" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الشاشة الرئيسية -->
+    <div id="main-screen" class="screen">
+        <!-- شريط التنقل -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <h2>نظام إدارة فريق الفعاليات</h2>
+                </div>
+                <div class="nav-user">
+                    <span id="user-name"></span>
+                    <span id="user-role" class="user-role"></span>
+                    <button id="logout-btn" class="btn btn-secondary">تسجيل الخروج</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- شريط التبويبات -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="members">الأعضاء</button>
+                <button class="tab-btn" data-tab="points" id="points-tab">إدارة النقاط</button>
+                <button class="tab-btn" data-tab="logs" id="logs-tab">السجلات</button>
+                <button class="tab-btn" data-tab="users" id="users-tab">إدارة المستخدمين</button>
+            </div>
+        </div>
+
+        <!-- محتوى التبويبات -->
+        <div class="tab-content">
+            <!-- تبويب الأعضاء -->
+            <div id="members-tab-content" class="tab-pane active">
+                <div class="content-header">
+                    <h3>إدارة الأعضاء</h3>
+                    <div class="header-actions">
+                        <button id="add-member-btn" class="btn btn-primary">إضافة عضو</button>
+                    </div>
+                </div>
+
+                <!-- فلاتر الفترة الزمنية -->
+                <div class="filters-container">
+                    <div class="filter-group">
+                        <label>الفترة الزمنية:</label>
+                        <select id="period-filter">
+                            <option value="all">جميع الأوقات</option>
+                            <option value="today">اليوم</option>
+                            <option value="week">هذا الأسبوع</option>
+                            <option value="month">هذا الشهر</option>
+                            <option value="custom">فترة مخصصة</option>
+                        </select>
+                    </div>
+                    <div id="custom-dates" class="filter-group" style="display: none;">
+                        <input type="date" id="start-date">
+                        <span>إلى</span>
+                        <input type="date" id="end-date">
+                        <button id="apply-filter" class="btn btn-secondary">تطبيق</button>
+                    </div>
+                </div>
+
+                <!-- قائمة الأعضاء -->
+                <div class="members-container">
+                    <div id="members-list" class="members-grid">
+                        <!-- سيتم ملء الأعضاء هنا بواسطة JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- تبويب إدارة النقاط -->
+            <div id="points-tab-content" class="tab-pane">
+                <div class="content-header">
+                    <h3>إدارة النقاط</h3>
+                </div>
+
+                <!-- نموذج إضافة نقطة -->
+                <div class="points-form-container">
+                    <form id="add-point-form" class="points-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="point-member">العضو</label>
+                                <select id="point-member" name="member_id" required>
+                                    <option value="">اختر العضو</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="point-type">نوع النقطة</label>
+                                <select id="point-type" name="point_type" required>
+                                    <option value="">اختر النوع</option>
+                                    <option value="positive">إيجابية</option>
+                                    <option value="negative">سلبية</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="point-category">الفئة</label>
+                                <select id="point-category" name="category" required>
+                                    <option value="">اختر الفئة</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="point-description">الوصف (اختياري)</label>
+                            <textarea id="point-description" name="description" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">إضافة النقطة</button>
+                    </form>
+                </div>
+
+                <!-- قائمة النقاط المضافة -->
+                <div class="points-list-container">
+                    <h4>النقاط المضافة مؤخراً</h4>
+                    <div id="recent-points" class="points-list">
+                        <!-- سيتم ملء النقاط هنا -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- تبويب السجلات -->
+            <div id="logs-tab-content" class="tab-pane">
+                <div class="content-header">
+                    <h3>سجل العمليات</h3>
+                </div>
+
+                <!-- فلاتر السجلات -->
+                <div class="filters-container">
+                    <div class="filter-group">
+                        <label>نوع العملية:</label>
+                        <select id="action-filter">
+                            <option value="">جميع العمليات</option>
+                            <option value="create">إنشاء</option>
+                            <option value="update">تحديث</option>
+                            <option value="delete">حذف</option>
+                            <option value="login">تسجيل دخول</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>نوع الهدف:</label>
+                        <select id="target-filter">
+                            <option value="">جميع الأهداف</option>
+                            <option value="user">مستخدم</option>
+                            <option value="member">عضو</option>
+                            <option value="point">نقطة</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- قائمة السجلات -->
+                <div id="logs-list" class="logs-container">
+                    <!-- سيتم ملء السجلات هنا -->
+                </div>
+            </div>
+
+            <!-- تبويب إدارة المستخدمين -->
+            <div id="users-tab-content" class="tab-pane">
+                <div class="content-header">
+                    <h3>إدارة المستخدمين</h3>
+                    <div class="header-actions">
+                        <button id="add-user-btn" class="btn btn-primary">إضافة مستخدم</button>
+                    </div>
+                </div>
+
+                <!-- قائمة المستخدمين -->
+                <div id="users-list" class="users-container">
+                    <!-- سيتم ملء المستخدمين هنا -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تفاصيل العضو -->
+    <div id="member-details-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="member-details-name"></h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="member-stats">
+                    <div class="stat-card">
+                        <h4>الإحصائيات العامة</h4>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-label">إجمالي الإيجابيات:</span>
+                                <span id="total-positive" class="stat-value positive"></span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">إجمالي السلبيات:</span>
+                                <span id="total-negative" class="stat-value negative"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h4>مقارنة الأسابيع</h4>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-label">الأسبوع الحالي (إيجابي):</span>
+                                <span id="current-week-positive" class="stat-value positive"></span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">الأسبوع السابق (إيجابي):</span>
+                                <span id="previous-week-positive" class="stat-value positive"></span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">الأسبوع الحالي (سلبي):</span>
+                                <span id="current-week-negative" class="stat-value negative"></span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">الأسبوع السابق (سلبي):</span>
+                                <span id="previous-week-negative" class="stat-value negative"></span>
+                            </div>
+                        </div>
+                        <div class="performance-indicator">
+                            <span class="stat-label">تقييم الأداء:</span>
+                            <span id="performance-status" class="performance-badge"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="negative-notes">
+                    <h4>الملاحظات السلبية (آخر أسبوع)</h4>
+                    <div id="negative-notes-list" class="notes-list">
+                        <!-- سيتم ملء الملاحظات هنا -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="edit-member-btn" class="btn btn-secondary">تعديل</button>
+                <button id="delete-member-btn" class="btn btn-danger">حذف</button>
+                <button class="btn btn-primary modal-close">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نوافذ أخرى -->
+    <div id="loading" class="loading" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>جاري التحميل...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
